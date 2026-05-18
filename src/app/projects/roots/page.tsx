@@ -21,9 +21,9 @@ export default function RootsProject() {
           </a>
         </div>
         <p className="text-lg text-fg-muted max-w-2xl leading-relaxed">
-          A private family media sharing platform where the server is explicitly
-          untrusted. All user content is encrypted client-side before upload,
-          and the server stores and routes data it cannot decrypt.
+          A private family media sharing platform for photos, videos, and
+          prompts. Families create groups, invite members, and share content
+          in a feed designed for close-knit use, not public broadcasting.
         </p>
         <p className="text-sm text-fg-subtle mt-3">
           Technical Lead & Co-Founder, March 2025 to Present. Solo-built the entire technical stack.
@@ -33,10 +33,10 @@ export default function RootsProject() {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16">
         {[
-          { value: "133", label: "Cloud Functions" },
-          { value: "1,494", label: "Automated Tests" },
-          { value: "47+", label: "Firestore Collections" },
-          { value: "8", label: "Storage Buckets" },
+          { value: "120", label: "Cloud Functions" },
+          { value: "1,849", label: "Automated Tests" },
+          { value: "75", label: "Compound Indexes" },
+          { value: "3", label: "Terraform Environments" },
         ].map((s) => (
           <div key={s.label} className="bg-card-bg border border-border rounded-lg p-4">
             <p className="text-2xl font-bold font-mono text-accent">{s.value}</p>
@@ -49,86 +49,98 @@ export default function RootsProject() {
       <Section title="Architecture">
         <p className="mb-4">
           Flutter mobile client communicating over HTTPS with Firebase Cloud Functions v2
-          on GCP. Firestore for structured data, Cloud Storage for encrypted media. Clean
-          architecture with BLoC state management, dependency injection via GetIt (76
-          registrations), and 13 feature modules.
+          on GCP. Firestore for structured data, Cloud Storage for media. Clean
+          architecture with BLoC state management and dependency injection via GetIt.
         </p>
         <div className="bg-code-bg border border-border rounded-lg p-5 font-mono text-sm overflow-x-auto mb-4">
           <pre className="text-fg-muted">{`Flutter Client (iOS/Android)
   |
-  +-- BLoC (13 state managers)
-  |     +-- Repositories (11 abstract interfaces)
-  |           +-- Services (25+ API services)
+  +-- BLoC state management
+  |     +-- Repository interfaces
+  |           +-- Services
   |                 +-- ApiClient (HTTP + auth interceptor)
   |
   |------- HTTPS -------|
   |
-Firebase Cloud Functions v2 (133 functions)
+Firebase Cloud Functions v2 (120 endpoints)
   +-- Auth middleware (Firebase Admin SDK)
   +-- Family access middleware
   +-- Business logic handlers
   |
-  +-- Firestore (47+ collections)
-  +-- Cloud Storage (8 buckets, signed URLs)
+  +-- Firestore (75 compound indexes)
+  +-- Cloud Storage (signed-URL delivery)
   +-- Firebase Auth (email/password, Google, Apple)
   +-- Cloud Scheduler + Cloud Tasks`}</pre>
         </div>
       </Section>
 
       {/* Cryptosystem */}
-      <Section title="Zero-Knowledge Encryption System">
+      <Section title="End-to-End Encryption (Planned)">
         <p className="mb-4">
-          The core technical challenge: families need to share photos and videos privately,
-          with the guarantee that even the server operator cannot access their content. This
-          required designing a custom cryptographic system that handles multi-user access,
-          key distribution, and member revocation without server-side plaintext access.
+          A zero-knowledge encryption layer is fully designed and will be integrated after
+          the initial launch. The entire application architecture (API contracts, data
+          models, and client-side service layers) was built from the start to support it.
+          Every API endpoint has both encrypted and plaintext variants. Firestore documents
+          include fields for wrapped keys, epoch references, and encrypted metadata. The
+          client{"'"}s repository layer abstracts encryption behind interfaces so the
+          cryptographic layer activates without a rewrite.
+        </p>
+        <p className="mb-4">
+          The central problem is member revocation. A single shared family key would
+          require re-encrypting all stored media when someone leaves. Epoch-based keys
+          solve this: on member removal, a new epoch key is generated and wrapped
+          individually for each remaining member via X25519. Old epochs stay readable
+          for historical content but can{"'"}t decrypt anything new. Posts are searchable
+          via HMAC-SHA256 blind indexes computed client-side, so the server executes
+          queries without seeing plaintext.
+        </p>
+        <p className="mb-4">
+          The protocol combines three proven systems: MLS (RFC 9420) for group key
+          management, Signal{"'"}s Double Ratchet for forward-secret messaging, and
+          Proton{"'"}s envelope model for media storage, adapted for multi-family group
+          access patterns.
         </p>
 
-        <h3 className="font-semibold mb-2">Threat Model</h3>
-        <p className="mb-4 text-fg-muted">
-          The server is explicitly untrusted for content access. It can validate family
-          membership, serve encrypted blobs, execute queries against blind indexes, and
-          rate-limit key operations. It cannot read content, derive keys, search plaintext,
-          or impersonate users (private keys never leave the client).
-        </p>
-
-        <h3 className="font-semibold mb-2">Key Hierarchy</h3>
+        <h3 className="font-semibold mb-2">Three-Tier Architecture</h3>
         <div className="bg-code-bg border border-border rounded-lg p-5 font-mono text-sm overflow-x-auto mb-4">
-          <pre className="text-fg-muted">{`User Master Key (Argon2id from password)
-  |
-  +-- Family Epoch Keys (rotate on member removal)
-  |     Wrapped per-member via X25519 ECDH
-  |     Used to wrap: Post Keys, Profile Keys, Folder Keys
-  |
-  +-- Post Keys (unique per post, random AES-256)
-        Wrapped with Family Epoch Key
-        Encrypts: metadata + all media variants`}</pre>
+          <pre className="text-fg-muted">{`Layer 1: Family Group Keys (MLS-inspired)
+  Epoch-based group keys via simplified TreeKEM
+  O(log n) key updates on member join/leave
+  Forward secrecy across key rotations
+
+Layer 2: Private Messaging (Double Ratchet)
+  Per-conversation root key > sending/receiving chains
+  Automatic key deletion after use (self-healing)
+  Out-of-order message key storage
+
+Layer 3: Media Encryption (Proton-inspired)
+  Unique AES-256-GCM file key per photo/video
+  Encrypted metadata (filenames, EXIF, timestamps)
+  Granular share scopes: family, subset, or private`}</pre>
         </div>
 
-        <h3 className="font-semibold mb-2">The Revocation Problem</h3>
-        <p className="mb-4 text-fg-muted">
-          The obvious approach (single shared key per family) breaks on member revocation.
-          Removing a member would require re-encrypting every piece of media in the family
-          vault. With per-family key hierarchies and individual user key wrapping, revocation
-          only requires re-wrapping the family key for remaining members. This tripled the
-          implementation complexity but made the system viable for real use.
-        </p>
-
-        <h3 className="font-semibold mb-2">Searchable Encryption</h3>
-        <p className="mb-4 text-fg-muted">
-          Posts are searchable by tag, type, and location without the server seeing plaintext.
-          HMAC-SHA256 blind indexes are computed client-side and stored per-family context.
-          The server matches on hash values during queries, never seeing the actual search terms.
-        </p>
-
-        <h3 className="font-semibold mb-2">Design Influences</h3>
-        <p className="text-fg-muted">
-          Async key distribution from Signal (new members receive historical keys from an
-          existing member, not the server). Envelope encryption from Proton (content
-          encrypted with a random DEK, DEK wrapped with a KEK, multiple wrapped copies per
-          access context). The multi-family key isolation and HMAC-based blind indexing are
-          novel to Roots, as neither Signal nor Proton support these patterns.
-        </p>
+        <h3 className="font-semibold mb-2">Key Hierarchy & Bundles</h3>
+        <div className="bg-code-bg border border-border rounded-lg p-5 font-mono text-sm overflow-x-auto mb-4">
+          <pre className="text-fg-muted">{`User Master Key (Argon2id: 3 iterations, 64 MB, 256-bit output)
+  |
+  +-- Identity Key Pair (Ed25519, signs all other keys)
+  |
+  +-- Device Keys (X25519, rotated every 90 days)
+  |     +-- Pre-key bundle (uploaded to server for async setup)
+  |
+  +-- Family Epoch Keys (one per family group, per epoch)
+  |     Wrapped per-member via X25519 ECDH key agreement
+  |     Epoch increments on every member add/remove
+  |     Old epochs retained read-only for historical content
+  |
+  +-- File Keys (unique random AES-256-GCM per media item)
+  |     Wrapped with current Family Epoch Key
+  |     Encrypts: content + metadata + all processed variants
+  |
+  +-- Message Chain Keys (Double Ratchet per conversation)
+        Root key > chain key > message key (deleted after use)
+        DH ratchet step on each reply exchange`}</pre>
+        </div>
       </Section>
 
       {/* MCP Servers */}
@@ -153,28 +165,75 @@ Firebase Cloud Functions v2 (133 functions)
         </p>
 
         <h3 className="font-semibold mb-2">Why This Matters</h3>
-        <p className="text-fg-muted">
+        <p className="text-fg-muted mb-4">
           Both servers follow a dual-mode pattern (HTTP standalone or stdio for MCP-hub
           integration). They give the AI agent a structured interface to the project's
           actual specifications, reducing drift between what the AI thinks the API does
           and what it actually does. This is the same class of tooling that powers
           agentic coding platforms at scale.
         </p>
+
+        <h3 className="font-semibold mb-2">Additional MCP Servers</h3>
+        <ul className="space-y-2 text-fg-muted">
+          <li><span className="text-fg font-medium">Context7</span>: Pulls current library and framework documentation into the agent context so it works from real API references, not training data.</li>
+          <li><span className="text-fg font-medium">Sequential Thinking</span>: Structured multi-step reasoning for complex debugging and architectural decisions.</li>
+          <li><span className="text-fg font-medium">Figma</span>: Reads design files directly so the agent can implement UI from actual mockups.</li>
+          <li><span className="text-fg font-medium">Playwright</span>: Browser automation for end-to-end testing and visual validation from within the agent loop.</li>
+          <li><span className="text-fg font-medium">Magic (21st.dev)</span>: Generates production-ready UI components from a curated pattern library.</li>
+          <li><span className="text-fg font-medium">Morphllm</span>: Token-optimized bulk code transformations across multiple files.</li>
+          <li><span className="text-fg font-medium">Serena</span>: Semantic code navigation with LSP integration and persistent project memory across sessions.</li>
+          <li><span className="text-fg font-medium"><a href="https://github.com/SuperClaude-Org/SuperClaude_Framework" target="_blank" rel="noopener noreferrer" className="text-accent hover:underline">SuperClaude Framework</a></span>: Behavioral framework that configures Claude Code with structured modes, flags, and rules for consistent agentic workflows.</li>
+        </ul>
       </Section>
 
       {/* Infrastructure */}
       <Section title="Infrastructure">
-        <p className="mb-4">
-          Terraform manages three Firebase environments (dev/staging/prod) with modular
-          IaC for Firebase services, Firestore, Storage, and Cloud Functions. State stored
-          in GCS. GitHub Actions handles CI with test automation and Terraform plan/apply.
+        <h3 className="font-semibold mb-2">Terraform IaC</h3>
+        <p className="mb-4 text-fg-muted">
+          Three Firebase environments (dev/staging/prod) managed by Terraform with
+          modular composition. Five modules (Storage, Firestore, IAM, KMS, Project APIs)
+          are composed per-environment with shared variables. State stored in GCS with
+          per-environment isolation.
         </p>
-        <ul className="space-y-2 text-fg-muted text-sm">
-          <li>Per-function service accounts with least-privilege IAM</li>
-          <li>Storage lifecycle tiering (STANDARD to NEARLINE to COLDLINE)</li>
-          <li>KMS encryption support (configurable, enabled in prod)</li>
-          <li>Security scanning with Trivy and Checkov (weekly + PR scans)</li>
-          <li>CI pipeline: analyze, unit tests (parallel by layer), integration tests, widget tests, E2E on iOS/Android simulators</li>
+        <div className="bg-code-bg border border-border rounded-lg p-5 font-mono text-sm overflow-x-auto mb-4">
+          <pre className="text-fg-muted">{`roots-infra/
+  environments/
+  |  dev/       main.tf, providers.tf, variables.tf
+  |  staging/   main.tf, providers.tf, variables.tf
+  |  prod/      main.tf, providers.tf, variables.tf
+  modules/
+     storage/     5 buckets, lifecycle policies, CORS
+     firestore/   database, security rules, indexes
+     iam/         CI/CD service account, role bindings
+     kms/         encryption key rings (prod)
+     project-apis/  GCP API enablement`}</pre>
+        </div>
+
+        <h3 className="font-semibold mb-2">CI/CD</h3>
+        <p className="mb-4 text-fg-muted">
+          Seven GitHub Actions workflows across two repos. The Flutter CI pipeline runs
+          analysis, formatting checks, and four parallel test categories (unit, widget,
+          integration, API). Backend deploys are a reusable workflow that checks out the
+          infra repo and runs {"`firebase deploy`"} against the target environment using
+          per-environment service account keys. iOS builds use Fastlane with match for
+          code signing and TestFlight distribution.
+        </p>
+        <div className="bg-code-bg border border-border rounded-lg p-5 font-mono text-sm overflow-x-auto mb-4">
+          <pre className="text-fg-muted">{`Push to main  ──>  CI (analyze + test matrix)  ──>  Deploy dev
+Tag rc-v*     ──>  Build iOS (staging)  ──>  TestFlight
+Tag v*        ──>  Build iOS (prod)     ──>  App Store
+
+Backend deploy (reusable):
+  checkout roots-infra  ──>  npm ci  ──>  firebase deploy
+  (functions, firestore rules/indexes, storage rules)`}</pre>
+        </div>
+
+        <h3 className="font-semibold mb-2">Security</h3>
+        <ul className="space-y-2 text-fg-muted">
+          <li>CI/CD service account per environment with least-privilege IAM (10 scoped roles)</li>
+          <li>KMS encryption key rings configurable per environment, enabled in prod</li>
+          <li>Uniform bucket-level access with public access prevention enforced on all buckets</li>
+          <li>Flutter flavors with separate bundle IDs, Firebase configs, and signing profiles per environment</li>
         </ul>
       </Section>
 
@@ -184,10 +243,10 @@ Firebase Cloud Functions v2 (133 functions)
           {[
             { category: "Frontend", items: "Flutter, Dart, BLoC" },
             { category: "Backend", items: "Node.js, TypeScript, Cloud Functions v2" },
-            { category: "Database", items: "Firestore, 47+ collections, 15+ compound indexes" },
-            { category: "Storage", items: "Cloud Storage, 8 buckets, signed-URL delivery" },
+            { category: "Database", items: "Firestore, 75 compound indexes, signed-URL media delivery" },
+            { category: "Storage", items: "Cloud Storage, lifecycle tiering, upload pipeline" },
             { category: "Infrastructure", items: "Terraform, GitHub Actions, Docker" },
-            { category: "Security", items: "X25519 ECDH, AES-256-GCM, HMAC-SHA256, Argon2id" },
+            { category: "Security", items: "Firebase Auth, IAM least-privilege, E2EE designed (planned)" },
             { category: "Auth", items: "Firebase Auth (email, Google, Apple OAuth)" },
             { category: "AI Tooling", items: "Claude Code, custom MCP servers (2)" },
           ].map((row) => (

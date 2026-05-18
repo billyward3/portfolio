@@ -3,30 +3,30 @@ import { ArrowRight, Mail } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 
 const highlights = [
-  { label: "Cloud Functions", value: "133" },
-  { label: "Automated Tests", value: "1,494" },
-  { label: "Firestore Collections", value: "47+" },
-  { label: "Storage Buckets", value: "8" },
+  { label: "Cloud Functions", value: "120" },
+  { label: "Automated Tests", value: "1,849" },
+  { label: "Compound Indexes", value: "75" },
+  { label: "Terraform Environments", value: "3" },
 ];
 
 const featuredProjects = [
   {
     title: "Roots App",
-    description: "Private family media platform with zero-knowledge encryption. 133 API endpoints, custom cryptographic key hierarchy, Terraform IaC across three environments.",
+    description: "Private family media sharing platform. 120 API endpoints, Terraform IaC across three environments, with end-to-end encryption designed for post-launch.",
     tags: ["TypeScript", "Node.js", "GCP", "Flutter", "Cryptography"],
     href: "/projects/roots",
   },
   {
-    title: "MCP Servers",
-    description: "Custom Model Context Protocol servers for Claude Code that expose API schemas and product requirements as structured tools for AI-assisted development.",
-    tags: ["TypeScript", "MCP", "Claude Code", "Swagger"],
-    href: "/projects/roots#mcp-servers",
+    title: "Crossword Creator",
+    description: "Wordlist-first crossword generator and solver. A constraint-satisfaction engine packs your words into a dense, real-style grid using AC-3 propagation and three placement strategies, with a NYT-style solver UI.",
+    tags: ["Next.js", "TypeScript", "Tailwind", "Vercel", "Redis"],
+    href: "/projects/crossword-creator",
   },
   {
-    title: "Crossword Creator",
-    description: "Interactive crossword puzzle builder and solver.",
-    tags: ["In Progress"],
-    href: "/projects/crossword-creator",
+    title: "CivicHousing",
+    description: "Accessible public housing intake wizard paired with a TTC allocation simulation. Demonstrates how coordinated exchange improves outcomes over FIFO using real Detroit housing data.",
+    tags: ["Next.js", "TypeScript", "Tailwind", "Framer Motion", "Leaflet"],
+    href: "/projects/civic-housing",
   },
 ];
 
@@ -105,9 +105,8 @@ export default function Home() {
         </h2>
         <p className="text-fg-muted leading-relaxed">
           Looking for new-grad software engineering roles where I can own systems
-          end to end and work on hard problems. Interested in AI infrastructure,
-          developer tools, applied cryptography, and early-stage startups.
-          Open to any US location or remote.
+          end to end and work on hard problems. Interested in AI safety, agentic
+          workflows, and ambitious projects. Open to any US location or remote.
         </p>
       </section>
     </div>
