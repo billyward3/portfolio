@@ -33,7 +33,7 @@ export default function RootsProject() {
       {/* Stats */}
       <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-16">
         {[
-          { value: "120", label: "Cloud Functions" },
+          { value: "114", label: "Cloud Functions" },
           { value: "1,849", label: "Automated Tests" },
           { value: "75", label: "Compound Indexes" },
           { value: "3", label: "Terraform Environments" },
@@ -62,7 +62,7 @@ export default function RootsProject() {
   |
   |------- HTTPS -------|
   |
-Firebase Cloud Functions v2 (120 endpoints)
+Firebase Cloud Functions v2 (109 API endpoints, 5 background jobs)
   +-- Auth middleware (Firebase Admin SDK)
   +-- Family access middleware
   +-- Business logic handlers

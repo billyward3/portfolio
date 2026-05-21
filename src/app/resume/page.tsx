@@ -50,9 +50,9 @@ export default function Resume() {
                 <span className="text-sm text-fg-subtle whitespace-nowrap">Mar 2025 - Present</span>
               </div>
               <ul className="text-sm text-fg-muted space-y-1.5 ml-4 list-disc">
-                <li>Architected a full-stack mobile platform (Flutter/Dart, Node.js/TypeScript) with 120 Cloud Functions on GCP, multi-bucket Cloud Storage, and signed-URL media pipelines. Incubated through the LAUNCH Pre-Accelerator and Zell Lurie Institute at the University of Michigan.</li>
+                <li>Architected a full-stack mobile platform (Flutter/Dart, Node.js/TypeScript) with 114 Cloud Functions on GCP (109 API endpoints, 5 background jobs), multi-bucket Cloud Storage, and signed-URL media pipelines. Incubated through the LAUNCH Pre-Accelerator and Zell Lurie Institute at the University of Michigan.</li>
                 <li>Designed a zero-knowledge encryption system (X25519 ECDH, AES-256-GCM, HMAC-SHA256 blind indexing, Argon2id) with per-family key hierarchies and secure key rotation.</li>
-                <li>Built Terraform IaC across dev/staging/prod, CI/CD via GitHub Actions, 1,849 automated tests, and two custom MCP servers for AI-assisted development with Claude Code.</li>
+                <li>Built Terraform IaC across dev/staging/prod, CI/CD via GitHub Actions, 1,849 automated tests (1,070 unit, 250 widget, 88 API, 87 integration), and two custom MCP servers for AI-assisted development with Claude Code.</li>
               </ul>
             </div>
 

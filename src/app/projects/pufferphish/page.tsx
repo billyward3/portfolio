@@ -220,7 +220,7 @@ PostgreSQL (AWS RDS)
       <Section title="Context">
         <p>
           Senior capstone project at the University of Michigan, 2025. I led
-          the team and wrote all of the code. The detection system combines a
+          the team and implemented the full codebase. The detection system combines a
           pre-trained CodeBERT model from Hugging Face with a hand-tuned
           rule-based engine, deployed on AWS with CDK-managed infrastructure.
         </p>

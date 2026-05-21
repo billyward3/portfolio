@@ -140,7 +140,7 @@ export default function CrosswordCreator() {
           fanning the solver out across multiple seeds in parallel.
         </p>
         <p>
-          The unique change in strategy I&apos;ve provided is the
+          The novel change in strategy I&apos;ve provided is the
           adjacency-aware placer. It handles two user words that share no
           letters by placing them side-by-side and validating every
           resulting two-letter perpendicular run against an English bigram

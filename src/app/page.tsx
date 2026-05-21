@@ -3,7 +3,7 @@ import { ArrowRight, Mail } from "lucide-react";
 import { GitHubIcon, LinkedInIcon } from "@/components/icons";
 
 const highlights = [
-  { label: "Cloud Functions", value: "120" },
+  { label: "Cloud Functions", value: "114" },
   { label: "Automated Tests", value: "1,849" },
   { label: "Compound Indexes", value: "75" },
   { label: "Terraform Environments", value: "3" },
@@ -12,7 +12,7 @@ const highlights = [
 const featuredProjects = [
   {
     title: "Roots App",
-    description: "Private family media sharing platform. 120 API endpoints, Terraform IaC across three environments, with end-to-end encryption designed for post-launch.",
+    description: "Private family media sharing platform. 114 Cloud Functions, Terraform IaC across three environments, with end-to-end encryption designed for post-launch.",
     tags: ["TypeScript", "Node.js", "GCP", "Flutter", "Cryptography"],
     href: "/projects/roots",
   },
