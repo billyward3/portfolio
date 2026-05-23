@@ -3,6 +3,7 @@ import { ExternalLink } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Roots App",
+  description: "Private family media sharing platform with 114 Cloud Functions, Terraform IaC, and end-to-end encryption designed for post-launch.",
 };
 
 export default function RootsProject() {
@@ -26,7 +27,7 @@ export default function RootsProject() {
           in a feed designed for close-knit use, not public broadcasting.
         </p>
         <p className="text-sm text-fg-subtle mt-3">
-          Technical Lead & Co-Founder, March 2025 to Present. Solo-built the entire technical stack.
+          Technical Lead & Co-Founder, March 2025 to Present. Sole engineer across architecture, backend, frontend, infrastructure, and testing.
         </p>
       </div>
 
@@ -83,7 +84,8 @@ Firebase Cloud Functions v2 (109 API endpoints, 5 background jobs)
           Every API endpoint has both encrypted and plaintext variants. Firestore documents
           include fields for wrapped keys, epoch references, and encrypted metadata. The
           client{"'"}s repository layer abstracts encryption behind interfaces so the
-          cryptographic layer activates without a rewrite.
+          cryptographic layer activates without a rewrite. Shipping the product first
+          validates core assumptions before adding protocol-level complexity.
         </p>
         <p className="mb-4">
           The central problem is member revocation. A single shared family key would
@@ -146,9 +148,12 @@ Layer 3: Media Encryption (Proton-inspired)
       {/* MCP Servers */}
       <Section title="MCP Servers" id="mcp-servers">
         <p className="mb-4">
-          Two custom Model Context Protocol servers built to give Claude Code a single
-          source of truth for the project's API contracts and product requirements.
+          Two custom Model Context Protocol servers and eight integrated third-party
+          servers that extend Claude Code with structured access to the project's
+          API contracts, product requirements, and development tools.
         </p>
+
+        <p className="text-xs font-mono text-fg-subtle uppercase tracking-wider mb-3">Custom</p>
 
         <h3 className="font-semibold mb-2">API Documentation Server</h3>
         <p className="mb-4 text-fg-muted">
@@ -164,16 +169,14 @@ Layer 3: Media Encryption (Proton-inspired)
           specification files and caches results in memory.
         </p>
 
-        <h3 className="font-semibold mb-2">Why This Matters</h3>
-        <p className="text-fg-muted mb-4">
+        <p className="text-fg-muted mb-6">
           Both servers follow a dual-mode pattern (HTTP standalone or stdio for MCP-hub
           integration). They give the AI agent a structured interface to the project's
           actual specifications, reducing drift between what the AI thinks the API does
-          and what it actually does. This is the same class of tooling that powers
-          agentic coding platforms at scale.
+          and what it actually does.
         </p>
 
-        <h3 className="font-semibold mb-2">Additional MCP Servers</h3>
+        <p className="text-xs font-mono text-fg-subtle uppercase tracking-wider mb-3">Integrated</p>
         <ul className="space-y-2 text-fg-muted">
           <li><span className="text-fg font-medium">Context7</span>: Pulls current library and framework documentation into the agent context so it works from real API references, not training data.</li>
           <li><span className="text-fg font-medium">Sequential Thinking</span>: Structured multi-step reasoning for complex debugging and architectural decisions.</li>

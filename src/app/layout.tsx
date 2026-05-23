@@ -20,7 +20,7 @@ export const metadata: Metadata = {
     default: "William Ward",
     template: "%s | William Ward",
   },
-  description: "Software engineer and technical co-founder. Building with agentic AI, applied cryptography, and full-stack systems.",
+  description: "Software engineer and technical co-founder. Full-stack systems, applied cryptography, and AI-assisted development.",
   metadataBase: new URL("https://williamward.dev"),
 };
 

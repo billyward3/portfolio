@@ -4,6 +4,7 @@ import { Download, ArrowUpRight } from "lucide-react";
 
 export const metadata: Metadata = {
   title: "Resume",
+  description: "William Ward's resume. University of Michigan CS, full-stack development, cryptographic systems, and cloud infrastructure.",
 };
 
 export default function Resume() {
@@ -59,13 +60,26 @@ export default function Resume() {
             <div>
               <div className="flex items-start justify-between gap-4 mb-2">
                 <div>
-                  <p className="font-semibold">Full Stack Developer / Database Developer</p>
+                  <p className="font-semibold">Full Stack Developer</p>
                   <p className="text-sm text-fg-muted">IFE Americas, Brighton, MI</p>
                 </div>
-                <span className="text-sm text-fg-subtle whitespace-nowrap">May 2023 - Aug 2024</span>
+                <span className="text-sm text-fg-subtle whitespace-nowrap">Jun 2024 - Aug 2024</span>
               </div>
               <ul className="text-sm text-fg-muted space-y-1.5 ml-4 list-disc">
-                <li>Built an automated email pipeline (Python, Flask, SMTP, SQL Server) and an internal lead-management tool in SQL Server integrated with the company CRM.</li>
+                <li>Built an automated email pipeline using Python, Flask, SMTP, and SQL Server.</li>
+              </ul>
+            </div>
+
+            <div>
+              <div className="flex items-start justify-between gap-4 mb-2">
+                <div>
+                  <p className="font-semibold">Database Developer</p>
+                  <p className="text-sm text-fg-muted">IFE Americas, Brighton, MI</p>
+                </div>
+                <span className="text-sm text-fg-subtle whitespace-nowrap">May 2023 - Aug 2023</span>
+              </div>
+              <ul className="text-sm text-fg-muted space-y-1.5 ml-4 list-disc">
+                <li>Built an internal lead-management tool in SQL Server integrated with the company CRM.</li>
               </ul>
             </div>
           </div>

@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 
 export const metadata: Metadata = {
   title: "Projects",
+  description: "Personal projects, team work, and selected coursework from University of Michigan CS.",
 };
 
 const projects = [

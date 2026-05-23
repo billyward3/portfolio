@@ -39,8 +39,8 @@ export default function Home() {
         </h1>
         <p className="text-lg text-fg-muted max-w-2xl mb-6 leading-relaxed">
           Software engineer and technical co-founder. I build full-stack systems,
-          design cryptographic protocols, and use agentic AI tooling as my primary
-          development workflow. University of Michigan CS, Dec 2025.
+          design cryptographic protocols, and integrate AI tooling into my development
+          workflow. University of Michigan CS, Dec 2025.
         </p>
         <div className="flex items-center gap-4">
           <a href="https://github.com/billyward3" target="_blank" rel="noopener noreferrer" className="text-fg-muted hover:text-fg transition-colors" aria-label="GitHub">
@@ -56,9 +56,14 @@ export default function Home() {
       </section>
 
       <section className="mb-20">
-        <h2 className="text-sm font-mono text-fg-subtle uppercase tracking-wider mb-6">
-          Roots App, by the numbers
-        </h2>
+        <div className="flex items-center justify-between mb-6">
+          <h2 className="text-sm font-mono text-fg-subtle uppercase tracking-wider">
+            Roots App, by the numbers
+          </h2>
+          <Link href="/projects/roots" className="text-sm text-fg-muted hover:text-accent transition-colors flex items-center gap-1">
+            View project <ArrowRight size={14} />
+          </Link>
+        </div>
         <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
           {highlights.map((item) => (
             <div key={item.label} className="bg-card-bg border border-border rounded-lg p-4">
@@ -104,9 +109,10 @@ export default function Home() {
           Currently
         </h2>
         <p className="text-fg-muted leading-relaxed">
-          Looking for new-grad software engineering roles where I can own systems
-          end to end and work on hard problems. Interested in AI safety, agentic
-          workflows, and ambitious projects. Open to any US location or remote.
+          Looking for new-grad roles where I can build the systems that serious
+          AI research depends on. Most drawn to teams working on multi-agent
+          learning, alignment, and the experimental infrastructure that makes
+          both possible. US-based or remote.
         </p>
       </section>
     </div>
